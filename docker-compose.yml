@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  vulturewatch:
+    build: .
+    container_name: vulturewatch
+    restart: unless-stopped
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - ./sbom:/app/sbom:ro
+      - ./data:/app/data
+    environment:
+      - RUN_ONCE=false
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-}
+      - NVD_API_KEY=${NVD_API_KEY:-}
+    env_file:
+      - .env
+    # Para executar apenas uma vez (útil com cron externo)
+    # command: ["python", "-m", "vulturewatch.main"]
+    # environment:
+    #   - RUN_ONCE=true
+

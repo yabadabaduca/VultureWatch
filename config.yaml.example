@@ -1,0 +1,66 @@
+# Configuração do VultureWatch
+
+# Intervalo de execução (formato: "5m", "1h", "6h", "24h")
+poll_interval: "1h"
+
+# Filtros de CVSS
+cvss_min_score: 9.0
+
+# Nível mínimo de maturidade do exploit (0-3)
+# 0 = só artigo/whitepaper
+# 1 = PoC teórica
+# 2 = PoC funcional (manual steps)
+# 3 = exploit integrado (script pronto, módulo Metasploit)
+maturity_min_level: 2
+
+# Filtros adicionais
+filters:
+  only_components_in_sbom: true
+  include_kev_even_if_cvss_below_min: true
+
+# Configurações de notificação
+notifications:
+  slack:
+    enabled: true
+    webhook_url: ""  # Preencher com webhook do Slack
+    channel: "#security-alerts"
+  
+  telegram:
+    enabled: true
+    bot_token: ""  # Preencher com token do bot
+    chat_id: ""  # Preencher com chat_id do grupo/canal
+
+# Configurações de fontes de dados
+sources:
+  nvd:
+    enabled: true
+    api_key: ""  # Opcional, mas recomendado para rate limit maior
+  
+  kev:
+    enabled: true
+    url: "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+  
+  exploit_db:
+    enabled: true
+  
+  metasploit:
+    enabled: true
+
+# Configurações de SBOM
+sbom:
+  enabled: true
+  # Caminho para arquivo SBOM (CycloneDX ou SPDX)
+  # Pode ser um arquivo ou diretório com múltiplos arquivos
+  path: "./sbom"
+  # Formatos suportados: cyclonedx-json, spdx-json
+  format: "cyclonedx-json"
+
+# Configurações de banco de dados
+database:
+  # SQLite por padrão, mas pode usar PostgreSQL
+  type: "sqlite"
+  path: "./vulturewatch.db"
+  # Para PostgreSQL:
+  # type: "postgresql"
+  # url: "postgresql://user:pass@localhost/vulturewatch"
+
